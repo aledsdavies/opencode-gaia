@@ -87,6 +87,10 @@ function mergePatch(base: GaiaConfigPatch, patch: GaiaConfigPatch): GaiaConfigPa
   return {
     ...base,
     ...patch,
+    operationProfile: {
+      ...(base.operationProfile ?? {}),
+      ...(patch.operationProfile ?? {}),
+    },
     startup: {
       ...(base.startup ?? {}),
       ...(patch.startup ?? {}),

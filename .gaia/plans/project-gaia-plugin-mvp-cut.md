@@ -49,6 +49,8 @@ If any item above fails, MVP is not complete.
 - `hephaestus` (implementation).
 - `demeter` (historian).
 
+This P1 agent profile is also referred to as the **lean** mode.
+
 All other agents are deferred.
 
 ## 4) Tooling surface
@@ -98,6 +100,8 @@ These close open questions for P1 execution:
 6. **Default collaboration profile**: `standard` for MVP predictability.
 7. **A/B implementation strategy**: defer to post-MVP.
 8. **Test runner**: use Bun's built-in test runner for MVP (no Vitest in P1).
+9. **Operation profile naming**: treat MVP profile as `lean`.
+10. **Future custom operation profile**: allow subsystem combinations while GAIA remains mandatory.
 
 ---
 

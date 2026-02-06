@@ -10,18 +10,25 @@ export type AgentName =
   | "hades";
 
 export type AgentKey = "gaia" | AgentName;
+export type LeanAgentKey = "gaia" | "minerva" | "hephaestus" | "demeter";
 
 export type VcsType = "jj" | "git" | "none";
 
-export interface AgentEnvelope<TData> {
+export interface AgentEnvelope<TData, TAgent extends AgentKey = AgentName> {
   contract_version: "1.0";
-  agent: AgentName;
+  agent: TAgent;
   work_unit: string;
   session_id: string;
   vcs_type?: VcsType;
   ok: boolean;
   data: TData;
   errors: string[];
+}
+
+export interface GaiaData {
+  next_actions: string[];
+  delegations: string[];
+  summary: string;
 }
 
 export interface MinervaData {
@@ -101,15 +108,16 @@ export interface HadesData {
   risk_level: "low" | "medium" | "high" | "critical";
 }
 
-export type MinervaOutput = AgentEnvelope<MinervaData>;
-export type ApolloOutput = AgentEnvelope<ApolloData>;
-export type EleuthiaOutput = AgentEnvelope<EleuthiaData>;
-export type HephaestusOutput = AgentEnvelope<HephaestusData>;
-export type DemeterOutput = AgentEnvelope<DemeterData>;
-export type ArtemisOutput = AgentEnvelope<ArtemisData>;
-export type AetherOutput = AgentEnvelope<AetherData>;
-export type PoseidonOutput = AgentEnvelope<PoseidonData>;
-export type HadesOutput = AgentEnvelope<HadesData>;
+export type GaiaOutput = AgentEnvelope<GaiaData, "gaia">;
+export type MinervaOutput = AgentEnvelope<MinervaData, "minerva">;
+export type ApolloOutput = AgentEnvelope<ApolloData, "apollo">;
+export type EleuthiaOutput = AgentEnvelope<EleuthiaData, "eleuthia">;
+export type HephaestusOutput = AgentEnvelope<HephaestusData, "hephaestus">;
+export type DemeterOutput = AgentEnvelope<DemeterData, "demeter">;
+export type ArtemisOutput = AgentEnvelope<ArtemisData, "artemis">;
+export type AetherOutput = AgentEnvelope<AetherData, "aether">;
+export type PoseidonOutput = AgentEnvelope<PoseidonData, "poseidon">;
+export type HadesOutput = AgentEnvelope<HadesData, "hades">;
 
 export interface AgentModelConfig {
   model: string;
@@ -121,4 +129,10 @@ export interface AgentModelConfig {
     budgetTokens: number;
   };
   maxTokens?: number;
+}
+
+export interface AgentRuntimeConfig {
+  modelConfig: AgentModelConfig;
+  prompt: string;
+  disabled: boolean;
 }

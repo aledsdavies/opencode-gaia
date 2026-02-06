@@ -14,6 +14,7 @@ describe("parseGaiaConfig", () => {
     expect(config.startup?.askAtTaskStart).toBe(true);
     expect(config.wavePolicy?.enforceWaveId).toBe(true);
     expect(config.autopilotSafeguards?.maxToolCallsPerWave).toBe(40);
+    expect(config.operationProfile.agentSet).toBe("lean");
   });
 
   test("accepts per-agent model overrides", () => {
@@ -33,6 +34,51 @@ describe("parseGaiaConfig", () => {
   test("rejects invalid mode values", () => {
     expect(() => {
       parseGaiaConfig({ mode: "turbo" });
+    }).toThrow();
+  });
+
+  test("accepts future full agent set profile", () => {
+    const config = parseGaiaConfig({
+      operationProfile: {
+        agentSet: "full",
+      },
+    });
+
+    expect(config.operationProfile.agentSet).toBe("full");
+  });
+
+  test("accepts custom operation profile with subsystem mix", () => {
+    const config = parseGaiaConfig({
+      operationProfile: {
+        agentSet: "custom",
+        customSubsystems: {
+          reconRouting: true,
+          implementation: false,
+          projectMemory: true,
+        },
+      },
+    });
+
+    expect(config.operationProfile.agentSet).toBe("custom");
+    expect(config.operationProfile.customSubsystems).toEqual({
+      reconRouting: true,
+      implementation: false,
+      projectMemory: true,
+    });
+  });
+
+  test("rejects custom operation profile with no enabled subsystem", () => {
+    expect(() => {
+      parseGaiaConfig({
+        operationProfile: {
+          agentSet: "custom",
+          customSubsystems: {
+            reconRouting: false,
+            implementation: false,
+            projectMemory: false,
+          },
+        },
+      });
     }).toThrow();
   });
 });

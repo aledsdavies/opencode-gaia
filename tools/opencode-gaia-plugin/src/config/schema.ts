@@ -5,6 +5,12 @@ const VisibilitySchema = z.enum(["live", "checkpoint", "quiet"]);
 const InteractionSchema = z.enum(["standard", "pair"]);
 const CheckinCadenceSchema = z.enum(["step", "batch", "wave", "milestone"]);
 const ReviewDepthSchema = z.enum(["inline", "diff", "risk", "deep_repo"]);
+const AgentSetSchema = z.enum(["lean", "full", "custom"]);
+const LeanSubsystemKeySchema = z.enum([
+  "reconRouting",
+  "implementation",
+  "projectMemory",
+]);
 const DefaultProfileSchema = z.enum([
   "pair_live",
   "pair_batched",
@@ -40,6 +46,43 @@ export const GaiaConfigSchema = z.object({
   interaction: InteractionSchema.default("standard"),
   checkinCadence: CheckinCadenceSchema.default("wave"),
   reviewDepth: ReviewDepthSchema.default("diff"),
+  operationProfile: z
+    .object({
+      agentSet: AgentSetSchema.default("lean"),
+      customSubsystems: z.record(LeanSubsystemKeySchema, z.boolean()).optional(),
+    })
+    .superRefine((value, context) => {
+      if (value.agentSet === "custom") {
+        if (!value.customSubsystems) {
+          context.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "customSubsystems is required when agentSet is custom",
+            path: ["customSubsystems"],
+          });
+          return;
+        }
+
+        const subsystemCount = Object.values(value.customSubsystems).filter(Boolean).length;
+        if (subsystemCount === 0) {
+          context.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "customSubsystems must enable at least one subsystem",
+            path: ["customSubsystems"],
+          });
+        }
+      }
+
+      if (value.agentSet !== "custom" && value.customSubsystems) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "customSubsystems is only allowed when agentSet is custom",
+          path: ["customSubsystems"],
+        });
+      }
+    })
+    .default({
+      agentSet: "lean",
+    }),
   startup: z
     .object({
       askAtTaskStart: z.boolean().default(true),
@@ -96,6 +139,12 @@ export const GaiaConfigPatchSchema = z.object({
   interaction: InteractionSchema.optional(),
   checkinCadence: CheckinCadenceSchema.optional(),
   reviewDepth: ReviewDepthSchema.optional(),
+  operationProfile: z
+    .object({
+      agentSet: AgentSetSchema.optional(),
+      customSubsystems: z.record(LeanSubsystemKeySchema, z.boolean()).optional(),
+    })
+    .optional(),
   startup: z
     .object({
       askAtTaskStart: z.boolean().optional(),
