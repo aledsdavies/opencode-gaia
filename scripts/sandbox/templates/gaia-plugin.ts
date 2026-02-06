@@ -1,0 +1,74 @@
+import { tool, type Plugin } from "@opencode-ai/plugin";
+
+import { runDelegateGaiaTool, runGaiaInit } from "../../../tools/opencode-gaia-plugin/src/index.ts";
+
+const LEAN_AGENTS = ["gaia", "minerva", "hephaestus", "demeter"] as const;
+
+export const GaiaPlugin: Plugin = async () => {
+  return {
+    tool: {
+      gaia_init: tool({
+        description: "Create or refresh .gaia/gaia-init.md safely",
+        args: {
+          refresh: tool.schema.boolean().optional(),
+          content: tool.schema.string().optional(),
+          mission: tool.schema.string().optional(),
+          constraints: tool.schema.array(tool.schema.string()).optional(),
+          nonGoals: tool.schema.array(tool.schema.string()).optional(),
+          riskTolerance: tool.schema.enum(["low", "medium", "high"]).optional(),
+          notes: tool.schema.array(tool.schema.string()).optional(),
+        },
+        async execute(args, context) {
+          const result = await runGaiaInit({
+            repoRoot: context.worktree,
+            ...(args.refresh !== undefined ? { refresh: args.refresh } : {}),
+            ...(args.content ? { content: args.content } : {}),
+            answers: {
+              ...(args.mission ? { mission: args.mission } : {}),
+              ...(args.constraints ? { constraints: args.constraints } : {}),
+              ...(args.nonGoals ? { nonGoals: args.nonGoals } : {}),
+              ...(args.riskTolerance ? { riskTolerance: args.riskTolerance } : {}),
+              ...(args.notes ? { notes: args.notes } : {}),
+            },
+          });
+
+          return JSON.stringify(result, null, 2);
+        },
+      }),
+      delegate_gaia: tool({
+        description: "Parse delegated GAIA contract output and persist .gaia work-unit artifacts",
+        args: {
+          workUnit: tool.schema.string().min(1),
+          sessionId: tool.schema.string().min(1),
+          modelUsed: tool.schema.string().min(1),
+          agent: tool.schema.enum(LEAN_AGENTS),
+          responseText: tool.schema.string().min(1),
+          retryResponseText: tool.schema.string().optional(),
+          plan: tool.schema.string().optional(),
+          log: tool.schema.string().optional(),
+          decisions: tool.schema.string().optional(),
+        },
+        async execute(args, context) {
+          const result = await runDelegateGaiaTool({
+            repoRoot: context.worktree,
+            workUnit: args.workUnit,
+            sessionId: args.sessionId,
+            modelUsed: args.modelUsed,
+            agent: args.agent,
+            responseText: args.responseText,
+            ...(args.retryResponseText
+              ? { retry: async () => args.retryResponseText as string }
+              : {}),
+            artifacts: {
+              ...(args.plan ? { plan: args.plan } : {}),
+              ...(args.log ? { log: args.log } : {}),
+              ...(args.decisions ? { decisions: args.decisions } : {}),
+            },
+          });
+
+          return JSON.stringify(result, null, 2);
+        },
+      }),
+    },
+  };
+};

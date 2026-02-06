@@ -41,6 +41,17 @@ describe("LEAN_AGENT_PROMPTS", () => {
     expect(LEAN_AGENT_PROMPTS.gaia).toContain("checkpoint");
     expect(LEAN_AGENT_PROMPTS.gaia).toContain("stacked PR");
     expect(LEAN_AGENT_PROMPTS.gaia).toContain("outside GAIA");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("stack traces, logs, or repro steps");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("reproducer test");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("Operator");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("Owner");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("Context");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("Options");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("Recommendation");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("Action needed");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("Approve work unit");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("targeted questions");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("gaia-init");
 
     expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("TDD cycle");
     expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("failing test first");
@@ -49,5 +60,10 @@ describe("LEAN_AGENT_PROMPTS", () => {
     expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("tests passing");
     expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("review-ready");
     expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("submission-ready");
+    expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("low-mock");
+    expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("low-orchestration");
+    expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("real values");
+    expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("exact assertions");
+    expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("partial-response assertions");
   });
 });

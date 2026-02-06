@@ -22,8 +22,10 @@ This repository is pre-alpha. Keep changes small, typed, and easy to verify.
 ## Testing Approach
 
 - Follow TDD: write/adjust a failing test first, then implement, then refactor.
+- For bug reports (stack traces, logs, or repro steps), add a reproducer test first before fixing the bug.
 - Use Bun's built-in test runner for this project unless a clear need appears.
-- Prefer exact assertions over partial contains checks.
+- Prefer low-mock, low-orchestration tests with real values.
+- Prefer exact assertions over partial-response checks.
 
 ## Scope Discipline
 

@@ -26,6 +26,7 @@ Ship one complete orchestrated workflow that is demonstrably better than single-
 4. Work artifacts are written under `.gaia/` only.
 5. Native `plan` and `build` remain unchanged.
 6. The collaboration model supports both human-in-the-loop and agentic execution at a basic level.
+7. Human-facing role terminology is consistent: **Operator** (interactive) and **Owner** (accountable).
 
 If any item above fails, MVP is not complete.
 
@@ -63,6 +64,13 @@ All other agents are deferred.
 - `decision-capture` for question and rejection logging.
 - `rejection-feedback` prompt prefill behavior.
 - `harvest-reminder` to trigger DEMETER after implementation/verification waves.
+
+Decision hand-offs to the human should use a stable structure:
+
+- `Context`
+- `Options`
+- `Recommendation`
+- `Action needed`
 
 ## 6) Commands (minimum viable)
 - `/gaia-init` bootstrap command.

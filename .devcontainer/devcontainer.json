@@ -1,0 +1,25 @@
+{
+  "name": "opencode-gaia-sandbox",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "remoteUser": "node",
+  "workspaceFolder": "/workspaces/opencode-gaia",
+  "forwardPorts": [4096],
+  "portsAttributes": {
+    "4096": {
+      "label": "OpenCode Web",
+      "onAutoForward": "notify"
+    }
+  },
+  "postCreateCommand": "bash scripts/sandbox/bootstrap.sh && bun --version && opencode --version && cd tools/opencode-gaia-plugin && bun install && bun run check",
+  "postStartCommand": "bash scripts/sandbox/bootstrap.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "oven.bun-vscode"
+      ]
+    }
+  }
+}
