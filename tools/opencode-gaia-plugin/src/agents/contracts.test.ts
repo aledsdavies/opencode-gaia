@@ -12,13 +12,11 @@ describe("lean contract parsers", () => {
     const parsed = parseMinervaOutput({
       contract_version: "1.0",
       agent: "minerva",
-      work_unit: "wave-2",
+      work_unit: "unit-2",
       session_id: "s1",
-      vcs_type: "jj",
       ok: true,
       data: {
         repo_map: "tools/opencode-gaia-plugin/src",
-        vcs_type: "jj",
         plan: ["find entry points"],
         risk_list: ["missing parser"],
         suggested_agents: ["hephaestus"],
@@ -27,7 +25,7 @@ describe("lean contract parsers", () => {
     });
 
     expect(parsed.agent).toBe("minerva");
-    expect(parsed.data.vcs_type).toBe("jj");
+    expect(parsed.data.repo_map).toBe("tools/opencode-gaia-plugin/src");
   });
 
   test("rejects mismatched agent payload", () => {
@@ -35,7 +33,7 @@ describe("lean contract parsers", () => {
       parseHephaestusOutput({
         contract_version: "1.0",
         agent: "demeter",
-        work_unit: "wave-2",
+        work_unit: "unit-2",
         session_id: "s2",
         ok: true,
         data: {
@@ -55,11 +53,11 @@ describe("lean contract parsers", () => {
     const parsed = parseLeanAgentOutput("demeter", {
       contract_version: "1.0",
       agent: "demeter",
-      work_unit: "wave-2",
+      work_unit: "unit-2",
       session_id: "s3",
       ok: true,
       data: {
-        log_entry: "Completed wave",
+        log_entry: "Completed unit",
         decisions: [
           {
             type: "question",
@@ -69,7 +67,7 @@ describe("lean contract parsers", () => {
           },
         ],
         learnings: ["keep prompts lean"],
-        plan_updates: ["wave-2 in progress"],
+        plan_updates: ["unit-2 in progress"],
         session_summary: "Done",
       },
       errors: [],

@@ -3,7 +3,7 @@ import { z } from "zod";
 const ModeSchema = z.enum(["supervised", "autopilot", "locked"]);
 const VisibilitySchema = z.enum(["live", "checkpoint", "quiet"]);
 const InteractionSchema = z.enum(["standard", "pair"]);
-const CheckinCadenceSchema = z.enum(["step", "batch", "wave", "milestone"]);
+const CheckinCadenceSchema = z.enum(["step", "batch", "unit", "milestone"]);
 const ReviewDepthSchema = z.enum(["inline", "diff", "risk", "deep_repo"]);
 const AgentSetSchema = z.enum(["lean", "full", "custom"]);
 const LeanSubsystemKeySchema = z.enum([
@@ -44,7 +44,7 @@ export const GaiaConfigSchema = z.object({
   mode: ModeSchema.default("supervised"),
   visibility: VisibilitySchema.default("checkpoint"),
   interaction: InteractionSchema.default("standard"),
-  checkinCadence: CheckinCadenceSchema.default("wave"),
+  checkinCadence: CheckinCadenceSchema.default("unit"),
   reviewDepth: ReviewDepthSchema.default("diff"),
   operationProfile: z
     .object({
@@ -104,28 +104,28 @@ export const GaiaConfigSchema = z.object({
       gaiaInstructionFile: "GAIA.md",
       useLearnings: true,
     }),
-  wavePolicy: z
+  unitPolicy: z
     .object({
-      enforceWaveId: z.boolean().default(true),
+      enforceUnitId: z.boolean().default(true),
       boundaryRule: z
         .enum(["implementation+basic_checks", "manual"])
         .default("implementation+basic_checks"),
     })
     .default({
-      enforceWaveId: true,
+      enforceUnitId: true,
       boundaryRule: "implementation+basic_checks",
     }),
   autopilotSafeguards: z
     .object({
-      maxToolCallsPerWave: z.number().int().positive().default(40),
-      maxWaveMinutes: z.number().int().positive().default(20),
+      maxToolCallsPerUnit: z.number().int().positive().default(40),
+      maxUnitMinutes: z.number().int().positive().default(20),
       maxBackgroundTasks: z.number().int().positive().default(3),
       consecutiveFailureLimit: z.number().int().positive().default(3),
       onFailureLimit: z.enum(["checkpoint", "supervised_pause"]).default("checkpoint"),
     })
     .default({
-      maxToolCallsPerWave: 40,
-      maxWaveMinutes: 20,
+      maxToolCallsPerUnit: 40,
+      maxUnitMinutes: 20,
       maxBackgroundTasks: 3,
       consecutiveFailureLimit: 3,
       onFailureLimit: "checkpoint",
@@ -162,16 +162,16 @@ export const GaiaConfigPatchSchema = z.object({
       extraContextFiles: z.array(z.string()).optional(),
     })
     .optional(),
-  wavePolicy: z
+  unitPolicy: z
     .object({
-      enforceWaveId: z.boolean().optional(),
+      enforceUnitId: z.boolean().optional(),
       boundaryRule: z.enum(["implementation+basic_checks", "manual"]).optional(),
     })
     .optional(),
   autopilotSafeguards: z
     .object({
-      maxToolCallsPerWave: z.number().int().positive().optional(),
-      maxWaveMinutes: z.number().int().positive().optional(),
+      maxToolCallsPerUnit: z.number().int().positive().optional(),
+      maxUnitMinutes: z.number().int().positive().optional(),
       maxBackgroundTasks: z.number().int().positive().optional(),
       consecutiveFailureLimit: z.number().int().positive().optional(),
       onFailureLimit: z.enum(["checkpoint", "supervised_pause"]).optional(),

@@ -18,17 +18,17 @@ afterEach(async () => {
 
 describe("plan-gaia paths", () => {
   test("builds .gaia work-unit file paths", () => {
-    const paths = getPlanGaiaPaths("/repo", "wave-1");
+    const paths = getPlanGaiaPaths("/repo", "unit-1");
 
-    expect(paths.base_dir).toBe("/repo/.gaia/wave-1");
-    expect(paths.plan_path).toBe("/repo/.gaia/wave-1/plan.md");
-    expect(paths.log_path).toBe("/repo/.gaia/wave-1/log.md");
-    expect(paths.decisions_path).toBe("/repo/.gaia/wave-1/decisions.md");
+    expect(paths.base_dir).toBe("/repo/.gaia/unit-1");
+    expect(paths.plan_path).toBe("/repo/.gaia/unit-1/plan.md");
+    expect(paths.log_path).toBe("/repo/.gaia/unit-1/log.md");
+    expect(paths.decisions_path).toBe("/repo/.gaia/unit-1/decisions.md");
   });
 
   test("rejects invalid work-unit identifiers", () => {
     expect(() => getPlanGaiaPaths("/repo", "../escape")).toThrow();
-    expect(() => getPlanGaiaPaths("/repo", "wave/1")).toThrow();
+    expect(() => getPlanGaiaPaths("/repo", "unit/1")).toThrow();
   });
 });
 
@@ -39,19 +39,19 @@ describe("plan-gaia io", () => {
 
     await writePlanGaia({
       repoRoot,
-      workUnit: "wave-2",
+      workUnit: "unit-2",
       plan: "# Plan\n- implement",
       log: "# Log\n- started",
       decisions: "# Decisions\n- use bun",
     });
 
-    const readBack = await readPlanGaia({ repoRoot, workUnit: "wave-2" });
+    const readBack = await readPlanGaia({ repoRoot, workUnit: "unit-2" });
 
     expect(readBack.plan).toBe("# Plan\n- implement");
     expect(readBack.log).toBe("# Log\n- started");
     expect(readBack.decisions).toBe("# Decisions\n- use bun");
 
-    const direct = await readFile(join(repoRoot, ".gaia", "wave-2", "plan.md"), "utf8");
+    const direct = await readFile(join(repoRoot, ".gaia", "unit-2", "plan.md"), "utf8");
     expect(direct).toBe("# Plan\n- implement");
   });
 });

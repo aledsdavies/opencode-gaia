@@ -8,13 +8,10 @@ import type {
   MinervaOutput,
 } from "./types.js";
 
-const VcsTypeSchema = z.enum(["jj", "git", "none"]);
-
 const BaseEnvelopeSchema = z.object({
   contract_version: z.literal("1.0"),
   work_unit: z.string().min(1),
   session_id: z.string().min(1),
-  vcs_type: VcsTypeSchema.optional(),
   ok: z.boolean(),
   errors: z.array(z.string()),
 });
@@ -32,7 +29,6 @@ const MinervaOutputSchema = BaseEnvelopeSchema.extend({
   agent: z.literal("minerva"),
   data: z.object({
     repo_map: z.string(),
-    vcs_type: VcsTypeSchema,
     plan: z.array(z.string()),
     risk_list: z.array(z.string()),
     suggested_agents: z.array(z.string()),

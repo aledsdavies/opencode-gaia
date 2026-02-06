@@ -35,4 +35,19 @@ describe("LEAN_AGENT_PROMPTS", () => {
     expect(getAgentPrompt("hephaestus")).toBe(LEAN_AGENT_PROMPTS.hephaestus);
     expect(getAgentPrompt("demeter")).toBe(LEAN_AGENT_PROMPTS.demeter);
   });
+
+  test("enforces small-unit TDD and checkpoint guidance", () => {
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("small, actionable working unit");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("checkpoint");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("stacked PR");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("outside GAIA");
+
+    expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("TDD cycle");
+    expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("failing test first");
+    expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("small, working increments");
+    expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("stacked PR");
+    expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("tests passing");
+    expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("review-ready");
+    expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("submission-ready");
+  });
 });

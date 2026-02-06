@@ -103,8 +103,7 @@ const DANGEROUS_PATTERNS: RegExp[] = [
   /^mkfs\b/i,
   /^terraform\s+destroy\b/i,
   /^kubectl\s+delete\s+namespace\b/i,
-  /^git\s+push\s+.*--force\b/i,
-  /^jj\s+git\s+push\s+.*--force\b/i,
+  /^\S+(?:\s+\S+)?\s+push\s+.*--force\b/i,
 ];
 
 export function isDangerousBashCommand(command: string): boolean {

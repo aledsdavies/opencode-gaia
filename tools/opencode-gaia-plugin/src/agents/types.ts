@@ -12,14 +12,11 @@ export type AgentName =
 export type AgentKey = "gaia" | AgentName;
 export type LeanAgentKey = "gaia" | "minerva" | "hephaestus" | "demeter";
 
-export type VcsType = "jj" | "git" | "none";
-
 export interface AgentEnvelope<TData, TAgent extends AgentKey = AgentName> {
   contract_version: "1.0";
   agent: TAgent;
   work_unit: string;
   session_id: string;
-  vcs_type?: VcsType;
   ok: boolean;
   data: TData;
   errors: string[];
@@ -33,7 +30,6 @@ export interface GaiaData {
 
 export interface MinervaData {
   repo_map: string;
-  vcs_type: VcsType;
   plan: string[];
   risk_list: string[];
   suggested_agents: string[];

@@ -9,11 +9,11 @@ describe("parseGaiaConfig", () => {
     expect(config.mode).toBe("supervised");
     expect(config.visibility).toBe("checkpoint");
     expect(config.interaction).toBe("standard");
-    expect(config.checkinCadence).toBe("wave");
+    expect(config.checkinCadence).toBe("unit");
     expect(config.reviewDepth).toBe("diff");
     expect(config.startup?.askAtTaskStart).toBe(true);
-    expect(config.wavePolicy?.enforceWaveId).toBe(true);
-    expect(config.autopilotSafeguards?.maxToolCallsPerWave).toBe(40);
+    expect(config.unitPolicy?.enforceUnitId).toBe(true);
+    expect(config.autopilotSafeguards?.maxToolCallsPerUnit).toBe(40);
     expect(config.operationProfile.agentSet).toBe("lean");
   });
 
@@ -81,4 +81,5 @@ describe("parseGaiaConfig", () => {
       });
     }).toThrow();
   });
+
 });

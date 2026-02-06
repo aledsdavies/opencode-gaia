@@ -99,9 +99,9 @@ function mergePatch(base: GaiaConfigPatch, patch: GaiaConfigPatch): GaiaConfigPa
       ...(base.gaiaContext ?? {}),
       ...(patch.gaiaContext ?? {}),
     },
-    wavePolicy: {
-      ...(base.wavePolicy ?? {}),
-      ...(patch.wavePolicy ?? {}),
+    unitPolicy: {
+      ...(base.unitPolicy ?? {}),
+      ...(patch.unitPolicy ?? {}),
     },
     autopilotSafeguards: {
       ...(base.autopilotSafeguards ?? {}),

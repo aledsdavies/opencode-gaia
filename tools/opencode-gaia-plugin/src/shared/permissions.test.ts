@@ -16,7 +16,7 @@ describe("AGENT_PERMISSION_MATRIX", () => {
 
 describe("isDangerousBashCommand", () => {
   test("blocks force push", () => {
-    expect(isDangerousBashCommand("git push --force origin main")).toBe(true);
+    expect(isDangerousBashCommand("scm push --force origin main")).toBe(true);
   });
 
   test("blocks root wipe patterns", () => {
@@ -25,6 +25,6 @@ describe("isDangerousBashCommand", () => {
 
   test("allows safe checks", () => {
     expect(isDangerousBashCommand("bun test")).toBe(false);
-    expect(isDangerousBashCommand("git status")).toBe(false);
+    expect(isDangerousBashCommand("ls")).toBe(false);
   });
 });

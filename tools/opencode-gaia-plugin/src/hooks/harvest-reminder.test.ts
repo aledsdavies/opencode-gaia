@@ -15,8 +15,8 @@ describe("shouldTriggerHarvestReminder", () => {
 
 describe("buildHarvestReminderMessage", () => {
   test("includes work unit in reminder", () => {
-    expect(buildHarvestReminderMessage("wave-3")).toBe(
-      "Run DEMETER harvest for work unit wave-3.",
+    expect(buildHarvestReminderMessage("unit-3")).toBe(
+      "Run DEMETER harvest for work unit unit-3.",
     );
   });
 });
