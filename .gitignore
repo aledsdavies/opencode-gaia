@@ -1,0 +1,6 @@
+.direnv/
+result
+node_modules/
+bun.lock
+bun.lockb
+dist/
