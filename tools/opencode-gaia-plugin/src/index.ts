@@ -34,6 +34,7 @@ export async function runGaiaInit(args: EnsureGaiaInitArgs): Promise<EnsureGaiaI
 export { processWorkUnit };
 export { runDelegateGaiaTool };
 export { ensureGaiaInit, getDefaultGaiaInitTemplate } from "./tools/gaia-init.js";
+export { applyGaiaRuntimeConfig, GAIA_SLASH_COMMAND_NAME } from "./config/opencode-runtime.js";
 export type { ProcessWorkUnitArgs, ProcessWorkUnitResult };
 export type { DelegateGaiaToolArgs, DelegateGaiaToolArtifacts };
 export type { EnsureGaiaInitArgs, EnsureGaiaInitResult };

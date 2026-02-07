@@ -83,12 +83,16 @@ Commands print heartbeat progress lines while running (default every 10s). Overr
 ## Current focus
 
 - Define and ship the MVP cut in `.gaia/plans/project-gaia-plugin-mvp-cut.md`
+- Anchor work to GAIA north star and durable orchestration docs
 - Build the portable core plugin under `tools/opencode-gaia-plugin/`
 - Keep host-specific wiring separate from core runtime logic
 - Validate both supervised and agentic execution paths in a practical way
 
 ## Planning documents
 
+- `GAIA.md`
+- `.gaia/gaia-init.md`
 - `.gaia/plans/project-gaia-plugin.md`
 - `.gaia/plans/project-gaia-plugin-implementation-companion.md`
 - `.gaia/plans/project-gaia-plugin-mvp-cut.md`
+- `.gaia/plans/gaia-init-spec.md`

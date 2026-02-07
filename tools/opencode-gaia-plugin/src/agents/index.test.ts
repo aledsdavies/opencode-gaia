@@ -102,4 +102,21 @@ describe("resolveOperationAgentKeys", () => {
 
     expect(keys).toEqual(["gaia", "minerva", "demeter"]);
   });
+
+  test("returns gaia-only set when custom profile disables all subsystems", () => {
+    const keys = resolveOperationAgentKeys(
+      parseGaiaConfig({
+        operationProfile: {
+          agentSet: "custom",
+          customSubsystems: {
+            reconRouting: false,
+            implementation: false,
+            projectMemory: false,
+          },
+        },
+      }),
+    );
+
+    expect(keys).toEqual(["gaia"]);
+  });
 });

@@ -245,6 +245,8 @@ async function expectLockedError(run: () => Promise<void>): Promise<void> {
 }
 
 export async function commandServeWeb(context: CommandContext): Promise<void> {
+  await commandBootstrap(context);
+
   await runOpenCode({
     repoRoot: context.repoRoot,
     args: ["web", "--hostname", "0.0.0.0", "--port", getPort()],
@@ -254,6 +256,8 @@ export async function commandServeWeb(context: CommandContext): Promise<void> {
 }
 
 export async function commandServeApi(context: CommandContext): Promise<void> {
+  await commandBootstrap(context);
+
   await runOpenCode({
     repoRoot: context.repoRoot,
     args: ["serve", "--hostname", "0.0.0.0", "--port", getPort()],

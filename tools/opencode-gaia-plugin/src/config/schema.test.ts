@@ -67,19 +67,24 @@ describe("parseGaiaConfig", () => {
     });
   });
 
-  test("rejects custom operation profile with no enabled subsystem", () => {
-    expect(() => {
-      parseGaiaConfig({
-        operationProfile: {
-          agentSet: "custom",
-          customSubsystems: {
-            reconRouting: false,
-            implementation: false,
-            projectMemory: false,
-          },
+  test("accepts custom operation profile with gaia-only subsystem state", () => {
+    const config = parseGaiaConfig({
+      operationProfile: {
+        agentSet: "custom",
+        customSubsystems: {
+          reconRouting: false,
+          implementation: false,
+          projectMemory: false,
         },
-      });
-    }).toThrow();
+      },
+    });
+
+    expect(config.operationProfile.agentSet).toBe("custom");
+    expect(config.operationProfile.customSubsystems).toEqual({
+      reconRouting: false,
+      implementation: false,
+      projectMemory: false,
+    });
   });
 
 });

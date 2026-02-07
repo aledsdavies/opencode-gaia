@@ -1,7 +1,11 @@
 import { tool, type Plugin } from "@opencode-ai/plugin";
 
 import { loadGaiaConfig } from "../../../tools/opencode-gaia-plugin/src/config/loader.ts";
-import { runDelegateGaiaTool, runGaiaInit } from "../../../tools/opencode-gaia-plugin/src/index.ts";
+import {
+  applyGaiaRuntimeConfig,
+  runDelegateGaiaTool,
+  runGaiaInit,
+} from "../../../tools/opencode-gaia-plugin/src/index.ts";
 
 const LEAN_AGENTS = ["gaia", "minerva", "hephaestus", "demeter"] as const;
 
@@ -15,6 +19,9 @@ function resolveRepoRoot(context: { directory: string; worktree: string }): stri
 
 export const GaiaPlugin: Plugin = async () => {
   return {
+    config: async (config) => {
+      applyGaiaRuntimeConfig(config);
+    },
     tool: {
       gaia_init: tool({
         description: "Create or refresh .gaia/gaia-init.md safely",
@@ -22,9 +29,14 @@ export const GaiaPlugin: Plugin = async () => {
           refresh: tool.schema.boolean().optional(),
           content: tool.schema.string().optional(),
           mission: tool.schema.string().optional(),
+          productContext: tool.schema.array(tool.schema.string()).optional(),
+          successSignals: tool.schema.array(tool.schema.string()).optional(),
           constraints: tool.schema.array(tool.schema.string()).optional(),
           nonGoals: tool.schema.array(tool.schema.string()).optional(),
           riskTolerance: tool.schema.enum(["low", "medium", "high"]).optional(),
+          decisionModel: tool.schema.array(tool.schema.string()).optional(),
+          qualityBar: tool.schema.array(tool.schema.string()).optional(),
+          communicationContract: tool.schema.array(tool.schema.string()).optional(),
           notes: tool.schema.array(tool.schema.string()).optional(),
         },
         async execute(args, context) {
@@ -38,9 +50,16 @@ export const GaiaPlugin: Plugin = async () => {
             ...(args.content ? { content: args.content } : {}),
             answers: {
               ...(args.mission ? { mission: args.mission } : {}),
+              ...(args.productContext ? { productContext: args.productContext } : {}),
+              ...(args.successSignals ? { successSignals: args.successSignals } : {}),
               ...(args.constraints ? { constraints: args.constraints } : {}),
               ...(args.nonGoals ? { nonGoals: args.nonGoals } : {}),
               ...(args.riskTolerance ? { riskTolerance: args.riskTolerance } : {}),
+              ...(args.decisionModel ? { decisionModel: args.decisionModel } : {}),
+              ...(args.qualityBar ? { qualityBar: args.qualityBar } : {}),
+              ...(args.communicationContract
+                ? { communicationContract: args.communicationContract }
+                : {}),
               ...(args.notes ? { notes: args.notes } : {}),
             },
           });

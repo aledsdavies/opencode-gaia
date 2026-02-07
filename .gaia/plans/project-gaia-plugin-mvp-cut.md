@@ -14,6 +14,20 @@ without scope creep.
 
 This cut is the execution contract for the first release candidate.
 
+## North Star Alignment
+
+This MVP is aligned to one core product direction:
+
+- GAIA is a human-in-the-loop orchestrator, not a fully autonomous replacement for human judgment.
+- GAIA should support broader product work, not only code edits.
+- Specialist agents are expected to be imperfect; GAIA's role is to coordinate, validate, and
+  escalate decisions clearly.
+
+Phase note:
+
+- This phase prioritizes a strong base GAIA and `gaia_init` memory model.
+- Subsystem expansion is intentionally deferred until this base behavior is reliable.
+
 ---
 
 ## MVP Outcome

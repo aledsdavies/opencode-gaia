@@ -52,6 +52,11 @@ describe("LEAN_AGENT_PROMPTS", () => {
     expect(LEAN_AGENT_PROMPTS.gaia).toContain("Approve work unit");
     expect(LEAN_AGENT_PROMPTS.gaia).toContain("targeted questions");
     expect(LEAN_AGENT_PROMPTS.gaia).toContain("gaia-init");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("not code-only");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("classify -> plan -> checkpoint -> delegate -> harvest");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("base GAIA mode");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("work_unit");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("done_when");
 
     expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("TDD cycle");
     expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("failing test first");

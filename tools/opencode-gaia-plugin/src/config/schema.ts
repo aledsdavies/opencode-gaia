@@ -62,14 +62,6 @@ export const GaiaConfigSchema = z.object({
           return;
         }
 
-        const subsystemCount = Object.values(value.customSubsystems).filter(Boolean).length;
-        if (subsystemCount === 0) {
-          context.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "customSubsystems must enable at least one subsystem",
-            path: ["customSubsystems"],
-          });
-        }
       }
 
       if (value.agentSet !== "custom" && value.customSubsystems) {
