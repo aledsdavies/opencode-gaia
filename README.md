@@ -29,38 +29,40 @@ The plugin package lives at `tools/opencode-gaia-plugin/`.
 
 ## Sandbox testing
 
-Use the sandbox wrappers to avoid leaking host OpenCode configuration:
+Use the sandbox harness CLI to avoid leaking host OpenCode configuration:
 
 ```bash
-bash scripts/sandbox/bootstrap.sh
-bash scripts/sandbox/list-free-models.sh
-bash scripts/sandbox/run-smoke.sh
-bash scripts/sandbox/run-gaia-init-smoke.sh
-bash scripts/sandbox/run-harness-suite.sh basic
+bun run --cwd tools/opencode-gaia-harness cli bootstrap
+bun run --cwd tools/opencode-gaia-harness cli list-free-models
+bun run --cwd tools/opencode-gaia-harness cli smoke
+bun run --cwd tools/opencode-gaia-harness cli gaia-init-smoke
+bun run --cwd tools/opencode-gaia-harness cli locked-smoke
+bun run --cwd tools/opencode-gaia-harness cli suite basic
 ```
 
 Start a served OpenCode instance from the sandbox:
 
 ```bash
-bash scripts/sandbox/serve-web.sh
+bun run --cwd tools/opencode-gaia-harness cli serve-web
 ```
 
 Run the agent-driven bug reproduction harness:
 
 ```bash
-bash scripts/sandbox/run-bug-repro-harness.sh doc/bug-report.example.md
+bun run --cwd tools/opencode-gaia-harness cli bug doc/bug-report.example.md
 ```
 
 Run all harness stages in one command:
 
 ```bash
-bash scripts/sandbox/run-harness-suite.sh full doc/bug-report.example.md
+bun run --cwd tools/opencode-gaia-harness cli suite full doc/bug-report.example.md
 ```
 
 Use the plugin-only stage to validate local tool registration:
 
 ```bash
-bash scripts/sandbox/run-harness-suite.sh plugin
+bun run --cwd tools/opencode-gaia-harness cli suite plugin
+bun run --cwd tools/opencode-gaia-harness cli suite locked
 ```
 
 For containerized use:
@@ -69,6 +71,9 @@ For containerized use:
 - Docker compose: `docker compose -f docker-compose.sandbox.yml up --build`
 
 See `doc/Sandbox_Harness.md` for details.
+
+Harness commands include built-in timeouts; tune with env vars such as
+`OPENCODE_SMOKE_TIMEOUT_MS` and `OPENCODE_BUG_TIMEOUT_MS`.
 
 ## Current focus
 

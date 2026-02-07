@@ -12,4 +12,4 @@ services:
       - .:/workspace
     ports:
       - "4096:4096"
-    command: ["bash", "-lc", "scripts/sandbox/serve-web.sh"]
+    command: ["bash", "-lc", "bun run --cwd tools/opencode-gaia-harness cli serve-web"]

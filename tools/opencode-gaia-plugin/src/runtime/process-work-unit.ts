@@ -1,9 +1,11 @@
 import { collectResults, type CollectResultsSummary } from "../tools/collect-results.js";
 import { delegateGaia, type DelegateGaiaResult } from "../tools/delegate-gaia.js";
 import { type PlanGaiaPaths, writePlanGaia } from "../tools/plan-gaia.js";
+import { assertMutationAllowed, type GaiaMode } from "../shared/mode.js";
 
 export interface ProcessWorkUnitArgs<TParsed> {
   repoRoot: string;
+  mode?: GaiaMode;
   workUnit: string;
   sessionId: string;
   modelUsed: string;
@@ -24,6 +26,8 @@ export interface ProcessWorkUnitResult<TParsed> {
 export async function processWorkUnit<TParsed>(
   args: ProcessWorkUnitArgs<TParsed>,
 ): Promise<ProcessWorkUnitResult<TParsed>> {
+  assertMutationAllowed(args.mode, "plan_gaia writes");
+
   const delegateArgs = {
     sessionId: args.sessionId,
     modelUsed: args.modelUsed,

@@ -1,6 +1,8 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
+import { assertMutationAllowed, type GaiaMode } from "../shared/mode.js";
+
 export interface GaiaInitAnswers {
   mission?: string;
   constraints?: string[];
@@ -11,6 +13,7 @@ export interface GaiaInitAnswers {
 
 export interface EnsureGaiaInitArgs {
   repoRoot: string;
+  mode?: GaiaMode;
   refresh?: boolean;
   content?: string;
   answers?: GaiaInitAnswers;
@@ -84,6 +87,8 @@ async function fileExists(path: string): Promise<boolean> {
 }
 
 export async function ensureGaiaInit(args: EnsureGaiaInitArgs): Promise<EnsureGaiaInitResult> {
+  assertMutationAllowed(args.mode, "gaia_init");
+
   const gaiaDir = join(args.repoRoot, ".gaia");
   const initPath = join(gaiaDir, "gaia-init.md");
   const content = args.content ?? getDefaultGaiaInitTemplate(args.answers);

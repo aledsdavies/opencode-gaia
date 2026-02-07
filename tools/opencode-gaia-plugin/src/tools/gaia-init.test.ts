@@ -91,4 +91,18 @@ describe("ensureGaiaInit", () => {
     expect(gaiaInit).toContain("Risk tolerance: low.");
     expect(agents).toBe("# Existing AGENTS\n- keep");
   });
+
+  test("blocks file mutation in locked mode", async () => {
+    const repoRoot = await mkdtemp(join(tmpdir(), "gaia-init-"));
+    tempDirs.push(repoRoot);
+
+    await expect(
+      ensureGaiaInit({
+        repoRoot,
+        mode: "locked",
+      }),
+    ).rejects.toThrow("Locked mode blocks gaia_init");
+
+    await expect(readFile(join(repoRoot, ".gaia", "gaia-init.md"), "utf8")).rejects.toThrow();
+  });
 });

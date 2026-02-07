@@ -1,8 +1,17 @@
 import { tool, type Plugin } from "@opencode-ai/plugin";
 
+import { loadGaiaConfig } from "../../../tools/opencode-gaia-plugin/src/config/loader.ts";
 import { runDelegateGaiaTool, runGaiaInit } from "../../../tools/opencode-gaia-plugin/src/index.ts";
 
 const LEAN_AGENTS = ["gaia", "minerva", "hephaestus", "demeter"] as const;
+
+function resolveRepoRoot(context: { directory: string; worktree: string }): string {
+  if (context.worktree && context.worktree !== "/") {
+    return context.worktree;
+  }
+
+  return context.directory;
+}
 
 export const GaiaPlugin: Plugin = async () => {
   return {
@@ -19,8 +28,12 @@ export const GaiaPlugin: Plugin = async () => {
           notes: tool.schema.array(tool.schema.string()).optional(),
         },
         async execute(args, context) {
+          const repoRoot = resolveRepoRoot(context);
+          const config = await loadGaiaConfig({ repoRoot });
+
           const result = await runGaiaInit({
-            repoRoot: context.worktree,
+            repoRoot,
+            mode: config.mode,
             ...(args.refresh !== undefined ? { refresh: args.refresh } : {}),
             ...(args.content ? { content: args.content } : {}),
             answers: {
@@ -49,8 +62,12 @@ export const GaiaPlugin: Plugin = async () => {
           decisions: tool.schema.string().optional(),
         },
         async execute(args, context) {
+          const repoRoot = resolveRepoRoot(context);
+          const config = await loadGaiaConfig({ repoRoot });
+
           const result = await runDelegateGaiaTool({
-            repoRoot: context.worktree,
+            repoRoot,
+            mode: config.mode,
             workUnit: args.workUnit,
             sessionId: args.sessionId,
             modelUsed: args.modelUsed,

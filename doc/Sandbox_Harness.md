@@ -10,7 +10,7 @@ This document describes a clean, reproducible OpenCode harness setup for GAIA de
 
 ## Isolation Model
 
-All harness scripts route OpenCode through `scripts/sandbox/opencode.sh`, which sets:
+All harness commands route OpenCode through `tools/opencode-gaia-harness/src/` runtime setup, which sets:
 
 - `HOME=.sandbox/home`
 - `XDG_CONFIG_HOME=.sandbox/home/.config`
@@ -24,9 +24,13 @@ This avoids accidental use of host-level OpenCode or Claude config.
 
 ## Default Sandbox Config
 
-`scripts/sandbox/bootstrap.sh` creates `.sandbox/opencode/opencode.jsonc` if missing.
-It also syncs the GAIA local plugin template into `.sandbox/opencode/plugins/gaia-plugin.ts`
-and installs `@opencode-ai/plugin` for local tool registration.
+`bun run --cwd tools/opencode-gaia-harness cli bootstrap` creates
+`.sandbox/opencode/opencode.jsonc` if missing.
+
+It also syncs the GAIA plugin template from
+`tools/opencode-gaia-harness/templates/gaia-plugin.ts` into
+`.sandbox/opencode/plugins/gaia-plugin.ts`, and installs `@opencode-ai/plugin`
+for local tool registration.
 
 Default profile:
 
@@ -40,53 +44,60 @@ Default profile:
 - Bootstrap sandbox:
 
 ```bash
-bash scripts/sandbox/bootstrap.sh
+bun run --cwd tools/opencode-gaia-harness cli bootstrap
 ```
 
 - Run OpenCode with sandbox env:
 
 ```bash
-bash scripts/sandbox/opencode.sh
+bun run --cwd tools/opencode-gaia-harness cli opencode
 ```
 
 - Start web server:
 
 ```bash
-bash scripts/sandbox/serve-web.sh
+bun run --cwd tools/opencode-gaia-harness cli serve-web
 ```
 
 - Start API server:
 
 ```bash
-bash scripts/sandbox/serve-api.sh
+bun run --cwd tools/opencode-gaia-harness cli serve-api
 ```
 
 - Run smoke prompt:
 
 ```bash
-bash scripts/sandbox/run-smoke.sh
+bun run --cwd tools/opencode-gaia-harness cli smoke
 ```
 
-`run-smoke.sh` defaults to a non-interactive safe permission profile:
+`cli smoke` defaults to a non-interactive safe permission profile:
 
 - allow: `bash`, `read`
 - deny: `edit`, `write`
 
 Override with `OPENCODE_PERMISSION` when needed.
 
+Timeout defaults are built in. Override with env vars when needed:
+
+- `OPENCODE_LIST_TIMEOUT_MS`
+- `OPENCODE_SMOKE_TIMEOUT_MS`
+- `OPENCODE_GAIA_INIT_TIMEOUT_MS`
+- `OPENCODE_BUG_TIMEOUT_MS`
+
 - List currently available free models:
 
 ```bash
-bash scripts/sandbox/list-free-models.sh
+bun run --cwd tools/opencode-gaia-harness cli list-free-models
 ```
 
 - Run bug repro harness with attached report:
 
 ```bash
-bash scripts/sandbox/run-bug-repro-harness.sh doc/bug-report.example.md
+bun run --cwd tools/opencode-gaia-harness cli bug doc/bug-report.example.md
 ```
 
-`run-bug-repro-harness.sh` defaults to an implementation profile:
+`cli bug` defaults to an implementation profile:
 
 - allow: `bash`, `read`, `edit`, `write`
 
@@ -95,19 +106,28 @@ Override with `OPENCODE_PERMISSION` if you want stricter behavior.
 - Run GAIA plugin registration smoke test:
 
 ```bash
-bash scripts/sandbox/run-gaia-init-smoke.sh
+bun run --cwd tools/opencode-gaia-harness cli gaia-init-smoke
 ```
 
 This confirms local plugin loading and custom tool execution by invoking `gaia_init`
 through an agentic run and verifying `.gaia/gaia-init.md` was created.
 
+- Run locked-mode mutation guard smoke test:
+
+```bash
+bun run --cwd tools/opencode-gaia-harness cli locked-smoke
+```
+
+This validates that `mode: locked` blocks `.gaia` mutation paths.
+
 - Run harness suite modes:
 
 ```bash
-bash scripts/sandbox/run-harness-suite.sh basic
-bash scripts/sandbox/run-harness-suite.sh plugin
-bash scripts/sandbox/run-harness-suite.sh bug doc/bug-report.example.md
-bash scripts/sandbox/run-harness-suite.sh full doc/bug-report.example.md
+bun run --cwd tools/opencode-gaia-harness cli suite basic
+bun run --cwd tools/opencode-gaia-harness cli suite plugin
+bun run --cwd tools/opencode-gaia-harness cli suite locked
+bun run --cwd tools/opencode-gaia-harness cli suite bug doc/bug-report.example.md
+bun run --cwd tools/opencode-gaia-harness cli suite full doc/bug-report.example.md
 ```
 
 The bug harness prompt enforces reproducer-first TDD, low-mock tests, and exact assertions.

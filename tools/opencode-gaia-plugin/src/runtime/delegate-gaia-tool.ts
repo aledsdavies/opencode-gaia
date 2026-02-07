@@ -1,5 +1,6 @@
 import { parseLeanAgentOutput } from "../agents/contracts.js";
 import type { LeanAgentKey } from "../agents/types.js";
+import type { GaiaMode } from "../shared/mode.js";
 
 import {
   processWorkUnit,
@@ -14,6 +15,7 @@ export interface DelegateGaiaToolArtifacts {
 
 export interface DelegateGaiaToolArgs {
   repoRoot: string;
+  mode?: GaiaMode;
   workUnit: string;
   sessionId: string;
   modelUsed: string;
@@ -39,6 +41,7 @@ export async function runDelegateGaiaTool(
 
   return processWorkUnit({
     repoRoot: args.repoRoot,
+    ...(args.mode ? { mode: args.mode } : {}),
     workUnit: args.workUnit,
     sessionId: args.sessionId,
     modelUsed: args.modelUsed,

@@ -67,4 +67,26 @@ describe("processWorkUnit", () => {
     );
     expect(decisionsFile).toBe("# Decisions\n- capture error");
   });
+
+  test("blocks artifact writes in locked mode", async () => {
+    const repoRoot = await mkdtemp(join(tmpdir(), "gaia-runtime-"));
+    tempDirs.push(repoRoot);
+
+    await expect(
+      processWorkUnit({
+        repoRoot,
+        workUnit: "unit-locked-1",
+        sessionId: "s3",
+        modelUsed: "openai/gpt-5.3-codex",
+        responseText: '{"contract_version":"1.0","agent":"gaia"}',
+        parse: (input) => input,
+        plan: "# Plan\n- blocked",
+        log: "# Log\n- blocked",
+        decisions: "# Decisions\n- blocked",
+        mode: "locked",
+      }),
+    ).rejects.toThrow("Locked mode blocks plan_gaia writes");
+
+    await expect(readFile(join(repoRoot, ".gaia", "unit-locked-1", "plan.md"), "utf8")).rejects.toThrow();
+  });
 });

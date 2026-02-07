@@ -13,8 +13,8 @@
       "onAutoForward": "notify"
     }
   },
-  "postCreateCommand": "bash scripts/sandbox/bootstrap.sh && bun --version && opencode --version && cd tools/opencode-gaia-plugin && bun install && bun run check",
-  "postStartCommand": "bash scripts/sandbox/bootstrap.sh",
+  "postCreateCommand": "bun --version && opencode --version && cd tools/opencode-gaia-plugin && bun install && bun run check && cd ../opencode-gaia-harness && bun install && bun run check && bun run cli bootstrap",
+  "postStartCommand": "bun run --cwd tools/opencode-gaia-harness cli bootstrap",
   "customizations": {
     "vscode": {
       "extensions": [
