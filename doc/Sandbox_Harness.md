@@ -80,10 +80,22 @@ Override with `OPENCODE_PERMISSION` when needed.
 
 Timeout defaults are built in. Override with env vars when needed:
 
+- `OPENCODE_HEARTBEAT_MS`
+- `OPENCODE_SMOKE_HEARTBEAT_MS`
+- `OPENCODE_GAIA_INIT_HEARTBEAT_MS`
+- `OPENCODE_BUG_HEARTBEAT_MS`
 - `OPENCODE_LIST_TIMEOUT_MS`
 - `OPENCODE_SMOKE_TIMEOUT_MS`
+- `OPENCODE_SMOKE_IDLE_TIMEOUT_MS`
 - `OPENCODE_GAIA_INIT_TIMEOUT_MS`
+- `OPENCODE_GAIA_INIT_IDLE_TIMEOUT_MS`
 - `OPENCODE_BUG_TIMEOUT_MS`
+- `OPENCODE_BUG_IDLE_TIMEOUT_MS`
+
+Idle timeout vars are optional and disabled by default. Set them when you want faster
+stuck detection for interactive runs.
+
+Heartbeat defaults to 10 seconds and prints `[harness] still running ...` while long commands run.
 
 - List currently available free models:
 

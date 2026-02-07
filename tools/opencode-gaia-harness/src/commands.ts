@@ -21,6 +21,7 @@ const DEFAULT_LIST_TIMEOUT_MS = 60_000;
 const DEFAULT_SMOKE_TIMEOUT_MS = 180_000;
 const DEFAULT_GAIA_INIT_TIMEOUT_MS = 180_000;
 const DEFAULT_BUG_TIMEOUT_MS = 600_000;
+const DEFAULT_HEARTBEAT_MS = 10_000;
 
 function selectedModel(envName: string): string {
   return process.env[envName] ?? DEFAULT_MODEL;
@@ -45,6 +46,12 @@ function parseTimeoutMs(value: string | undefined): number | undefined {
 
 function timeoutMsFromEnv(envName: string, fallback: number): number {
   return parseTimeoutMs(process.env[envName]) ?? fallback;
+}
+
+function heartbeatMsFromEnv(envName: string): number {
+  return parseTimeoutMs(process.env[envName])
+    ?? parseTimeoutMs(process.env.OPENCODE_HEARTBEAT_MS)
+    ?? DEFAULT_HEARTBEAT_MS;
 }
 
 function resolveBugReportPath(repoRoot: string, value: string | undefined): string {
@@ -120,6 +127,9 @@ export async function commandSmoke(context: CommandContext, prompt?: string): Pr
     ],
     stdio: "inherit",
     timeoutMs: timeoutMsFromEnv("OPENCODE_SMOKE_TIMEOUT_MS", DEFAULT_SMOKE_TIMEOUT_MS),
+    ...withTimeout(parseTimeoutMs(process.env.OPENCODE_SMOKE_IDLE_TIMEOUT_MS)),
+    heartbeatMs: heartbeatMsFromEnv("OPENCODE_SMOKE_HEARTBEAT_MS"),
+    heartbeatLabel: "smoke",
     envOverrides: {
       OPENCODE_PERMISSION: process.env.OPENCODE_PERMISSION ?? getSmokePermission(),
     },
@@ -153,6 +163,9 @@ export async function commandBug(context: CommandContext, bugReport?: string): P
     ],
     stdio: "inherit",
     timeoutMs: timeoutMsFromEnv("OPENCODE_BUG_TIMEOUT_MS", DEFAULT_BUG_TIMEOUT_MS),
+    ...withTimeout(parseTimeoutMs(process.env.OPENCODE_BUG_IDLE_TIMEOUT_MS)),
+    heartbeatMs: heartbeatMsFromEnv("OPENCODE_BUG_HEARTBEAT_MS"),
+    heartbeatLabel: "bug-harness",
     envOverrides: {
       OPENCODE_PERMISSION: process.env.OPENCODE_PERMISSION ?? getBugHarnessPermission(),
     },
@@ -173,6 +186,9 @@ export async function commandGaiaInitSmoke(context: CommandContext): Promise<voi
     ],
     stdio: "inherit",
     timeoutMs: timeoutMsFromEnv("OPENCODE_GAIA_INIT_TIMEOUT_MS", DEFAULT_GAIA_INIT_TIMEOUT_MS),
+    ...withTimeout(parseTimeoutMs(process.env.OPENCODE_GAIA_INIT_IDLE_TIMEOUT_MS)),
+    heartbeatMs: heartbeatMsFromEnv("OPENCODE_GAIA_INIT_HEARTBEAT_MS"),
+    heartbeatLabel: "gaia-init-smoke",
     envOverrides: {
       OPENCODE_PERMISSION: process.env.OPENCODE_PERMISSION ?? getBugHarnessPermission(),
     },

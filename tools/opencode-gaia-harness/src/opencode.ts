@@ -12,6 +12,10 @@ export interface RunOpenCodeOptions {
   allowFailure?: boolean;
   stdio?: "pipe" | "inherit";
   timeoutMs?: number;
+  idleTimeoutMs?: number;
+  streamOutput?: boolean;
+  heartbeatMs?: number;
+  heartbeatLabel?: string;
   envOverrides?: NodeJS.ProcessEnv;
   exec?: ExecFn;
 }
@@ -28,6 +32,10 @@ export async function runOpenCode(options: RunOpenCodeOptions): Promise<ExecResu
     ...(options.allowFailure !== undefined ? { allowFailure: options.allowFailure } : {}),
     ...(options.stdio ? { stdio: options.stdio } : {}),
     ...(options.timeoutMs !== undefined ? { timeoutMs: options.timeoutMs } : {}),
+    ...(options.idleTimeoutMs !== undefined ? { idleTimeoutMs: options.idleTimeoutMs } : {}),
+    ...(options.streamOutput !== undefined ? { streamOutput: options.streamOutput } : {}),
+    ...(options.heartbeatMs !== undefined ? { heartbeatMs: options.heartbeatMs } : {}),
+    ...(options.heartbeatLabel !== undefined ? { heartbeatLabel: options.heartbeatLabel } : {}),
     env: {
       ...buildSandboxEnv(paths),
       ...(options.envOverrides ?? {}),

@@ -29,15 +29,21 @@ The plugin package lives at `tools/opencode-gaia-plugin/`.
 
 ## Sandbox testing
 
-Use the sandbox harness CLI to avoid leaking host OpenCode configuration:
+The harness is a small Bun CLI (`tools/opencode-gaia-harness/`) that runs OpenCode in an
+isolated `.sandbox/` environment. It lets developers evaluate GAIA behavior without inheriting
+host-level OpenCode config.
+
+Recommended dev flow:
+
+1. Bootstrap isolated config and plugin wiring.
+2. Run basic smoke checks.
+3. Verify plugin tool path (`gaia_init`) and locked-mode guard.
 
 ```bash
 bun run --cwd tools/opencode-gaia-harness cli bootstrap
-bun run --cwd tools/opencode-gaia-harness cli list-free-models
-bun run --cwd tools/opencode-gaia-harness cli smoke
-bun run --cwd tools/opencode-gaia-harness cli gaia-init-smoke
-bun run --cwd tools/opencode-gaia-harness cli locked-smoke
 bun run --cwd tools/opencode-gaia-harness cli suite basic
+bun run --cwd tools/opencode-gaia-harness cli suite plugin
+bun run --cwd tools/opencode-gaia-harness cli suite locked
 ```
 
 Start a served OpenCode instance from the sandbox:
@@ -58,13 +64,6 @@ Run all harness stages in one command:
 bun run --cwd tools/opencode-gaia-harness cli suite full doc/bug-report.example.md
 ```
 
-Use the plugin-only stage to validate local tool registration:
-
-```bash
-bun run --cwd tools/opencode-gaia-harness cli suite plugin
-bun run --cwd tools/opencode-gaia-harness cli suite locked
-```
-
 For containerized use:
 
 - Devcontainer: `.devcontainer/devcontainer.json`
@@ -73,7 +72,13 @@ For containerized use:
 See `doc/Sandbox_Harness.md` for details.
 
 Harness commands include built-in timeouts; tune with env vars such as
-`OPENCODE_SMOKE_TIMEOUT_MS` and `OPENCODE_BUG_TIMEOUT_MS`.
+`OPENCODE_SMOKE_TIMEOUT_MS`, `OPENCODE_SMOKE_IDLE_TIMEOUT_MS`,
+`OPENCODE_GAIA_INIT_TIMEOUT_MS`, and `OPENCODE_BUG_TIMEOUT_MS`.
+
+Idle timeout vars are optional and default to disabled.
+
+Commands print heartbeat progress lines while running (default every 10s). Override with
+`OPENCODE_HEARTBEAT_MS` or command-specific heartbeat env vars.
 
 ## Current focus
 
