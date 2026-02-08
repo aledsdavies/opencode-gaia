@@ -7,14 +7,8 @@ describe("parseGaiaConfig", () => {
     const config = parseGaiaConfig({});
 
     expect(config.mode).toBe("supervised");
-    expect(config.visibility).toBe("checkpoint");
-    expect(config.interaction).toBe("standard");
-    expect(config.checkinCadence).toBe("unit");
-    expect(config.reviewDepth).toBe("diff");
-    expect(config.startup?.askAtTaskStart).toBe(true);
-    expect(config.unitPolicy?.enforceUnitId).toBe(true);
-    expect(config.autopilotSafeguards?.maxToolCallsPerUnit).toBe(40);
     expect(config.operationProfile.agentSet).toBe("lean");
+    expect(config.operationProfile.customAgents).toBeUndefined();
   });
 
   test("accepts per-agent model overrides", () => {
@@ -47,44 +41,28 @@ describe("parseGaiaConfig", () => {
     expect(config.operationProfile.agentSet).toBe("full");
   });
 
-  test("accepts custom operation profile with subsystem mix", () => {
+  test("accepts custom operation profile with custom agents", () => {
     const config = parseGaiaConfig({
       operationProfile: {
         agentSet: "custom",
-        customSubsystems: {
-          reconRouting: true,
-          implementation: false,
-          projectMemory: true,
-        },
+        customAgents: ["athena", "demeter"],
       },
     });
 
     expect(config.operationProfile.agentSet).toBe("custom");
-    expect(config.operationProfile.customSubsystems).toEqual({
-      reconRouting: true,
-      implementation: false,
-      projectMemory: true,
-    });
+    expect(config.operationProfile.customAgents).toEqual(["athena", "demeter"]);
   });
 
-  test("accepts custom operation profile with gaia-only subsystem state", () => {
+  test("accepts custom operation profile with gaia-only custom list", () => {
     const config = parseGaiaConfig({
       operationProfile: {
         agentSet: "custom",
-        customSubsystems: {
-          reconRouting: false,
-          implementation: false,
-          projectMemory: false,
-        },
+        customAgents: [],
       },
     });
 
     expect(config.operationProfile.agentSet).toBe("custom");
-    expect(config.operationProfile.customSubsystems).toEqual({
-      reconRouting: false,
-      implementation: false,
-      projectMemory: false,
-    });
+    expect(config.operationProfile.customAgents).toEqual([]);
   });
 
 });

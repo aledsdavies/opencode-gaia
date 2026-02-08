@@ -20,9 +20,18 @@ describe("buildSuiteSteps", () => {
       "bootstrap",
       "list-free-models",
       "smoke",
+      "lean-subagents-smoke",
       "gaia-init-smoke",
       "locked-smoke",
       "bug",
+    ]);
+  });
+
+  test("returns plugin suite command order", () => {
+    expect(buildSuiteSteps("plugin")).toEqual([
+      "bootstrap",
+      "lean-subagents-smoke",
+      "gaia-init-smoke",
     ]);
   });
 

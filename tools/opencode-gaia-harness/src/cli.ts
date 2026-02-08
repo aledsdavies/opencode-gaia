@@ -2,6 +2,7 @@ import {
   commandBootstrap,
   commandBug,
   commandGaiaInitSmoke,
+  commandLeanSubagentsSmoke,
   commandListFreeModels,
   commandLockedSmoke,
   commandOpenCode,
@@ -24,6 +25,7 @@ function printHelp(): void {
   console.log("  smoke [prompt]");
   console.log("  bug [bug-report-file]");
   console.log("  gaia-init-smoke");
+  console.log("  lean-subagents-smoke");
   console.log("  locked-smoke");
   console.log("  serve-web");
   console.log("  serve-api");
@@ -53,6 +55,9 @@ async function main(): Promise<void> {
       return;
     case "gaia-init-smoke":
       await commandGaiaInitSmoke(context);
+      return;
+    case "lean-subagents-smoke":
+      await commandLeanSubagentsSmoke(context);
       return;
     case "locked-smoke":
       await commandLockedSmoke(context);

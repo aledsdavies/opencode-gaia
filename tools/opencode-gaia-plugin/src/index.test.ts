@@ -64,7 +64,7 @@ describe("plugin scaffold", () => {
         ok: true,
         data: {
           next_actions: ["continue"],
-          delegations: ["minerva"],
+          delegations: ["athena"],
           summary: "ok",
         },
         errors: [],

@@ -124,6 +124,14 @@ bun run --cwd tools/opencode-gaia-harness cli gaia-init-smoke
 This confirms local plugin loading and custom tool execution by invoking `gaia_init`
 through an agentic run and verifying `.gaia/gaia-init.md` was created.
 
+- Run lean subagent wiring smoke test:
+
+```bash
+bun run --cwd tools/opencode-gaia-harness cli lean-subagents-smoke
+```
+
+This confirms GAIA is primary and lean specialists are configured as hidden subagents by default.
+
 - Run locked-mode mutation guard smoke test:
 
 ```bash

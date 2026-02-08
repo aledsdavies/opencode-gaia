@@ -67,6 +67,14 @@ interface GaiaInitRunner {
   runGaiaInit: (args: { repoRoot: string; mode?: "supervised" | "autopilot" | "locked" }) => Promise<unknown>;
 }
 
+function asRecord(value: unknown): Record<string, unknown> {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    throw new Error("Expected object record");
+  }
+
+  return value as Record<string, unknown>;
+}
+
 function withExec(exec: ExecFn | undefined): { exec?: ExecFn } {
   return exec ? { exec } : {};
 }
@@ -203,6 +211,63 @@ export async function commandGaiaInitSmoke(context: CommandContext): Promise<voi
   console.log(`gaia_init smoke succeeded: ${initPath}`);
 }
 
+export async function commandLeanSubagentsSmoke(context: CommandContext): Promise<void> {
+  const result = await runOpenCode({
+    repoRoot: context.repoRoot,
+    args: ["debug", "config"],
+    stdio: "pipe",
+    timeoutMs: timeoutMsFromEnv("OPENCODE_GAIA_INIT_TIMEOUT_MS", DEFAULT_GAIA_INIT_TIMEOUT_MS),
+    ...withExec(context.exec),
+  });
+
+  const parsed = JSON.parse(result.stdout) as unknown;
+  const config = asRecord(parsed);
+  const agents = asRecord(config.agent);
+  const gaia = asRecord(agents.gaia);
+  const athena = asRecord(agents.athena);
+  const hephaestus = asRecord(agents.hephaestus);
+  const demeter = asRecord(agents.demeter);
+  const gaiaPermission = asRecord(gaia.permission);
+  const gaiaTaskPermission = asRecord(gaiaPermission.task);
+
+  if (gaia.mode !== "primary") {
+    throw new Error("lean-subagents-smoke failed: gaia mode is not primary");
+  }
+
+  if (gaiaPermission.edit !== "deny") {
+    throw new Error("lean-subagents-smoke failed: gaia edit permission is not deny");
+  }
+
+  if (gaiaPermission.bash !== "deny") {
+    throw new Error("lean-subagents-smoke failed: gaia bash permission is not deny");
+  }
+
+  if (
+    gaiaTaskPermission["*"] !== "deny"
+    || gaiaTaskPermission.athena !== "allow"
+    || gaiaTaskPermission.hephaestus !== "allow"
+    || gaiaTaskPermission.demeter !== "allow"
+  ) {
+    throw new Error("lean-subagents-smoke failed: gaia task permission allowlist is incorrect");
+  }
+
+  for (const [name, agent] of [
+    ["athena", athena],
+    ["hephaestus", hephaestus],
+    ["demeter", demeter],
+  ] as const) {
+    if (agent.mode !== "subagent") {
+      throw new Error(`lean-subagents-smoke failed: ${name} mode is not subagent`);
+    }
+
+    if (agent.hidden !== true) {
+      throw new Error(`lean-subagents-smoke failed: ${name} is not hidden by default`);
+    }
+  }
+
+  console.log("lean-subagents-smoke succeeded: GAIA primary with hidden lean specialists");
+}
+
 export async function commandLockedSmoke(context: CommandContext): Promise<void> {
   const tmpWorktree = await mkdtemp(resolve(tmpdir(), "gaia-locked-"));
 
@@ -286,6 +351,9 @@ export async function commandSuite(
           context,
           "Agentic smoke test: confirm sandbox context and list exactly 3 repository files.",
         );
+        break;
+      case "lean-subagents-smoke":
+        await commandLeanSubagentsSmoke(context);
         break;
       case "gaia-init-smoke":
         await commandGaiaInitSmoke(context);

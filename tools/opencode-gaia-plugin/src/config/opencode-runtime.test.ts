@@ -23,17 +23,30 @@ describe("applyGaiaRuntimeConfig", () => {
     const commands = asRecord(config.command);
 
     const gaia = asRecord(agents.gaia);
-    const minerva = asRecord(agents.minerva);
+    const athena = asRecord(agents.athena);
     const hephaestus = asRecord(agents.hephaestus);
     const demeter = asRecord(agents.demeter);
     const gaiaInitCommand = asRecord(commands[GAIA_SLASH_COMMAND_NAME]);
 
     expect(gaia.mode).toBe("primary");
-    expect(minerva.mode).toBe("subagent");
+    expect(athena.mode).toBe("subagent");
     expect(hephaestus.mode).toBe("subagent");
     expect(demeter.mode).toBe("subagent");
+    expect(athena.hidden).toBe(true);
+    expect(hephaestus.hidden).toBe(true);
+    expect(demeter.hidden).toBe(true);
     expect(typeof gaia.prompt).toBe("string");
     expect(typeof gaia.model).toBe("string");
+
+    const gaiaPermission = asRecord(gaia.permission);
+    const gaiaTaskPermission = asRecord(gaiaPermission.task);
+
+    expect(gaiaPermission.edit).toBe("deny");
+    expect(gaiaPermission.bash).toBe("deny");
+    expect(gaiaTaskPermission["*"]).toBe("deny");
+    expect(gaiaTaskPermission.athena).toBe("allow");
+    expect(gaiaTaskPermission.hephaestus).toBe("allow");
+    expect(gaiaTaskPermission.demeter).toBe("allow");
 
     expect(gaiaInitCommand.template).toBe(
       "Run the gaia_init tool now with refresh=false unless the user explicitly asks to refresh.",
@@ -50,6 +63,10 @@ describe("applyGaiaRuntimeConfig", () => {
           mode: "primary",
           permission: {
             gaia_init: "deny",
+            edit: "allow",
+            task: {
+              "*": "allow",
+            },
           },
         },
       },
@@ -73,6 +90,8 @@ describe("applyGaiaRuntimeConfig", () => {
     expect(gaia.model).toBe("custom/model");
     expect(gaia.prompt).toBe("custom prompt");
     expect(permission.gaia_init).toBe("deny");
+    expect(permission.edit).toBe("allow");
+    expect(asRecord(permission.task)["*"]).toBe("allow");
     expect(gaiaInitCommand.template).toBe("custom template");
     expect(gaiaInitCommand.agent).toBe("build");
   });

@@ -1,11 +1,11 @@
 import { z } from "zod";
 
 import type {
+  AthenaOutput,
   DemeterOutput,
   GaiaOutput,
   HephaestusOutput,
   LeanAgentKey,
-  MinervaOutput,
 } from "./types.js";
 
 const BaseEnvelopeSchema = z.object({
@@ -25,8 +25,8 @@ const GaiaOutputSchema = BaseEnvelopeSchema.extend({
   }),
 });
 
-const MinervaOutputSchema = BaseEnvelopeSchema.extend({
-  agent: z.literal("minerva"),
+const AthenaOutputSchema = BaseEnvelopeSchema.extend({
+  agent: z.literal("athena"),
   data: z.object({
     repo_map: z.string(),
     plan: z.array(z.string()),
@@ -70,8 +70,8 @@ export function parseGaiaOutput(input: unknown): GaiaOutput {
   return GaiaOutputSchema.parse(input) as GaiaOutput;
 }
 
-export function parseMinervaOutput(input: unknown): MinervaOutput {
-  return MinervaOutputSchema.parse(input) as MinervaOutput;
+export function parseAthenaOutput(input: unknown): AthenaOutput {
+  return AthenaOutputSchema.parse(input) as AthenaOutput;
 }
 
 export function parseHephaestusOutput(input: unknown): HephaestusOutput {
@@ -85,12 +85,12 @@ export function parseDemeterOutput(input: unknown): DemeterOutput {
 export function parseLeanAgentOutput(
   agent: LeanAgentKey,
   input: unknown,
-): GaiaOutput | MinervaOutput | HephaestusOutput | DemeterOutput {
+): GaiaOutput | AthenaOutput | HephaestusOutput | DemeterOutput {
   switch (agent) {
     case "gaia":
       return parseGaiaOutput(input);
-    case "minerva":
-      return parseMinervaOutput(input);
+    case "athena":
+      return parseAthenaOutput(input);
     case "hephaestus":
       return parseHephaestusOutput(input);
     case "demeter":

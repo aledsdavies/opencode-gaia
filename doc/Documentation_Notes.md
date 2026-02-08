@@ -2,6 +2,12 @@
 
 This file tracks user-facing documentation we want to write after implementation stabilizes.
 
+## Documentation Taxonomy
+
+- Project-facing specification and product docs belong in `doc/`.
+- GAIA operational plans and runtime artifacts belong in `.gaia/`.
+- Canonical north star/specification: `doc/SPECIFICATION.md`.
+
 ## Product Overview
 
 - What Project GAIA is and the current pre-alpha status
@@ -19,7 +25,7 @@ This file tracks user-facing documentation we want to write after implementation
 - `.gaia/config.jsonc` structure and precedence with global config
 - Model overrides, fallback behavior, and safe defaults
 - Operation profile settings:
-  - `lean`: GAIA + MINERVA + HEPHAESTUS + DEMETER
+  - `lean`: GAIA + ATHENA + HEPHAESTUS + DEMETER
   - `full`: all agents enabled
   - `custom`: subsystem mix (GAIA always included)
 
@@ -32,7 +38,7 @@ This file tracks user-facing documentation we want to write after implementation
 ## Agent Reference
 
 - GAIA: orchestration role and boundaries
-- MINERVA: recon and routing role
+- ATHENA: recon and routing role
 - HEPHAESTUS: implementation role
 - DEMETER: memory and decision capture role
 - JSON contract expectations for delegated outputs

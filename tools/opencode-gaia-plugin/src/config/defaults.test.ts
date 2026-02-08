@@ -5,16 +5,10 @@ import { AGENT_DEFAULTS } from "./defaults";
 describe("AGENT_DEFAULTS", () => {
   test("includes all declared agents", () => {
     expect(Object.keys(AGENT_DEFAULTS).sort()).toEqual([
-      "aether",
-      "apollo",
-      "artemis",
+      "athena",
       "demeter",
-      "eleuthia",
       "gaia",
-      "hades",
       "hephaestus",
-      "minerva",
-      "poseidon",
     ]);
   });
 

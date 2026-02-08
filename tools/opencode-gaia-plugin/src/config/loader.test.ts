@@ -13,7 +13,6 @@ describe("loadGaiaConfig", () => {
     });
 
     expect(config.mode).toBe("supervised");
-    expect(config.startup.askAtTaskStart).toBe(true);
     expect(config.agents).toEqual({});
   });
 

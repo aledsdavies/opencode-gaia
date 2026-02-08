@@ -91,22 +91,6 @@ function mergePatch(base: GaiaConfigPatch, patch: GaiaConfigPatch): GaiaConfigPa
       ...(base.operationProfile ?? {}),
       ...(patch.operationProfile ?? {}),
     },
-    startup: {
-      ...(base.startup ?? {}),
-      ...(patch.startup ?? {}),
-    },
-    gaiaContext: {
-      ...(base.gaiaContext ?? {}),
-      ...(patch.gaiaContext ?? {}),
-    },
-    unitPolicy: {
-      ...(base.unitPolicy ?? {}),
-      ...(patch.unitPolicy ?? {}),
-    },
-    autopilotSafeguards: {
-      ...(base.autopilotSafeguards ?? {}),
-      ...(patch.autopilotSafeguards ?? {}),
-    },
     agents: mergeAgentOverrides(base.agents ?? {}, patch.agents ?? {}),
   };
 }

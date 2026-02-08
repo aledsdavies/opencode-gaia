@@ -5,16 +5,16 @@ import { getAgentPrompt, LEAN_AGENT_PROMPTS } from "./prompts";
 describe("LEAN_AGENT_PROMPTS", () => {
   test("defines all lean prompts", () => {
     expect(Object.keys(LEAN_AGENT_PROMPTS).sort()).toEqual([
+      "athena",
       "demeter",
       "gaia",
       "hephaestus",
-      "minerva",
     ]);
   });
 
   test("keeps prompts contract-oriented", () => {
     expect(LEAN_AGENT_PROMPTS.gaia).toContain("## Output Contract");
-    expect(LEAN_AGENT_PROMPTS.minerva).toContain("## Output Contract");
+    expect(LEAN_AGENT_PROMPTS.athena).toContain("## Output Contract");
     expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("## Output Contract");
     expect(LEAN_AGENT_PROMPTS.demeter).toContain("## Output Contract");
   });
@@ -31,7 +31,7 @@ describe("LEAN_AGENT_PROMPTS", () => {
 
   test("returns prompt by agent key", () => {
     expect(getAgentPrompt("gaia")).toBe(LEAN_AGENT_PROMPTS.gaia);
-    expect(getAgentPrompt("minerva")).toBe(LEAN_AGENT_PROMPTS.minerva);
+    expect(getAgentPrompt("athena")).toBe(LEAN_AGENT_PROMPTS.athena);
     expect(getAgentPrompt("hephaestus")).toBe(LEAN_AGENT_PROMPTS.hephaestus);
     expect(getAgentPrompt("demeter")).toBe(LEAN_AGENT_PROMPTS.demeter);
   });
@@ -57,6 +57,8 @@ describe("LEAN_AGENT_PROMPTS", () => {
     expect(LEAN_AGENT_PROMPTS.gaia).toContain("base GAIA mode");
     expect(LEAN_AGENT_PROMPTS.gaia).toContain("work_unit");
     expect(LEAN_AGENT_PROMPTS.gaia).toContain("done_when");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("Do not edit or write files directly");
+    expect(LEAN_AGENT_PROMPTS.gaia).toContain("simple informational tasks");
 
     expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("TDD cycle");
     expect(LEAN_AGENT_PROMPTS.hephaestus).toContain("failing test first");

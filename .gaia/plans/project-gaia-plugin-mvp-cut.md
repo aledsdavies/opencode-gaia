@@ -2,8 +2,7 @@
 
 > **Status**: Draft (execution baseline)
 > **Created**: 2026-02-06
-> **Paired plan**: `.gaia/plans/project-gaia-plugin.md`
-> **Implementation companion**: `.gaia/plans/project-gaia-plugin-implementation-companion.md`
+> **Canonical product spec**: `doc/SPECIFICATION.md`
 
 ---
 
@@ -60,7 +59,7 @@ If any item above fails, MVP is not complete.
 
 ## 3) MVP agent set only
 - `gaia` (primary orchestrator).
-- `minerva` (recon/routing).
+- `athena` (recon/routing).
 - `hephaestus` (implementation).
 - `demeter` (historian).
 
@@ -99,7 +98,7 @@ Decision hand-offs to the human should use a stable structure:
 
 ## Explicitly Out Of Scope (P1)
 
-- Full 9-agent roster (APOLLO, ELEUTHIA, ARTEMIS, AETHER, POSEIDON, HADES).
+- Full 9-agent roster (APOLLO, EILEITHYIA, ARTEMIS, AETHER, POSEIDON, HADES).
 - Rich collaboration profile matrix (`/profile`, `/cadence`, `/review`, `/pair`, `/next`).
 - Full autopilot guardrail engine and complex pause UX.
 - Background orchestration manager and advanced parallel scheduling.
@@ -138,7 +137,7 @@ Exit: plugin builds, config resolves, and model fallback logic is testable.
 
 ## Wave 2 - Core agents and contracts
 - Add agent contract types and parser utilities.
-- Implement prompts for GAIA, MINERVA, HEPHAESTUS, DEMETER.
+- Implement prompts for GAIA, ATHENA, HEPHAESTUS, DEMETER.
 - Implement agent registry and config override merge.
 
 Exit: each MVP agent can be invoked with contract-compliant output.
@@ -184,7 +183,7 @@ Exit: all MVP acceptance gates pass.
 ## Gate C - Compatibility and portability
 - Native `plan` and `build` still work without GAIA orchestration side effects.
 - Core plugin runs when copied outside this dotfiles repository.
-- Optional `GAIA.md` and `.gaia/gaia-init.md` are non-fatal when absent.
+- Optional `.gaia/gaia-init.md` remains non-fatal when absent.
 
 ---
 
@@ -208,6 +207,12 @@ After this cut is accepted, expand in this order:
 3. Add full collaboration command matrix.
 4. Add richer pair-loop checkpoints and review depth controls.
 5. Tune model assignments and cost presets from real usage data.
+
+Roster note:
+
+- Future full-pantheon expansion is not constrained to the current names; additional Greek-god
+  specialists and user-defined specialist names are allowed as long as GAIA remains the primary
+  orchestrator.
 
 ---
 

@@ -12,14 +12,14 @@ describe("createLeanAgentRegistry", () => {
     });
 
     expect(Object.keys(registry).sort()).toEqual([
+      "athena",
       "demeter",
       "gaia",
       "hephaestus",
-      "minerva",
     ]);
 
-    expect(registry.gaia.modelConfig.model).toBe("openai/gpt-5.3-codex");
-    expect(registry.minerva.modelConfig.model).toBe("zhipuai-coding-plan/glm-4.7");
+    expect(registry.gaia.modelConfig.model).toBe("opencode/kimi-k2.5-free");
+    expect(registry.athena.modelConfig.model).toBe("opencode/glm-4.7-free");
   });
 
   test("merges model and prompt overrides", () => {
@@ -64,7 +64,7 @@ describe("createLeanAgentRegistry", () => {
   test("propagates disabled flag", () => {
     const config = parseGaiaConfig({
       agents: {
-        minerva: {
+        athena: {
           disabled: true,
         },
       },
@@ -75,7 +75,7 @@ describe("createLeanAgentRegistry", () => {
       defaults: AGENT_DEFAULTS,
     });
 
-    expect(registry.minerva.disabled).toBe(true);
+    expect(registry.athena.disabled).toBe(true);
   });
 });
 
@@ -83,36 +83,28 @@ describe("resolveOperationAgentKeys", () => {
   test("returns lean set by default", () => {
     const keys = resolveOperationAgentKeys(parseGaiaConfig({}));
 
-    expect(keys).toEqual(["gaia", "minerva", "hephaestus", "demeter"]);
+    expect(keys).toEqual(["gaia", "athena", "hephaestus", "demeter"]);
   });
 
-  test("returns subsystem-driven set for custom profile", () => {
+  test("returns custom agent set for custom profile", () => {
     const keys = resolveOperationAgentKeys(
       parseGaiaConfig({
         operationProfile: {
           agentSet: "custom",
-          customSubsystems: {
-            reconRouting: true,
-            implementation: false,
-            projectMemory: true,
-          },
+          customAgents: ["athena", "demeter"],
         },
       }),
     );
 
-    expect(keys).toEqual(["gaia", "minerva", "demeter"]);
+    expect(keys).toEqual(["gaia", "athena", "demeter"]);
   });
 
-  test("returns gaia-only set when custom profile disables all subsystems", () => {
+  test("returns gaia-only set when custom profile agent list is empty", () => {
     const keys = resolveOperationAgentKeys(
       parseGaiaConfig({
         operationProfile: {
           agentSet: "custom",
-          customSubsystems: {
-            reconRouting: false,
-            implementation: false,
-            projectMemory: false,
-          },
+          customAgents: [],
         },
       }),
     );

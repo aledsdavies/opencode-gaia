@@ -1,17 +1,17 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+  parseAthenaOutput,
   parseDemeterOutput,
   parseHephaestusOutput,
   parseLeanAgentOutput,
-  parseMinervaOutput,
 } from "./contracts";
 
 describe("lean contract parsers", () => {
-  test("parses valid MINERVA output", () => {
-    const parsed = parseMinervaOutput({
+  test("parses valid ATHENA output", () => {
+    const parsed = parseAthenaOutput({
       contract_version: "1.0",
-      agent: "minerva",
+      agent: "athena",
       work_unit: "unit-2",
       session_id: "s1",
       ok: true,
@@ -24,7 +24,7 @@ describe("lean contract parsers", () => {
       errors: [],
     });
 
-    expect(parsed.agent).toBe("minerva");
+    expect(parsed.agent).toBe("athena");
     expect(parsed.data.repo_map).toBe("tools/opencode-gaia-plugin/src");
   });
 
@@ -79,7 +79,7 @@ describe("lean contract parsers", () => {
 
   test("rejects bad envelope shape", () => {
     expect(() => {
-      parseMinervaOutput({
+      parseAthenaOutput({
         contract_version: "2.0",
       });
     }).toThrow();

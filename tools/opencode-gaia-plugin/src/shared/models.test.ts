@@ -12,8 +12,8 @@ describe("resolveModel", () => {
         model: "openai/gpt-5.1-codex",
       },
       availableModels: new Set([
-        "openai/gpt-5.3-codex",
-        "openai/gpt-5.2-codex",
+        "opencode/kimi-k2.5-free",
+        "opencode/glm-4.7-free",
         "openai/gpt-5.1-codex",
       ]),
     });
@@ -29,16 +29,16 @@ describe("resolveModel", () => {
       agentOverride: {
         model: "custom/not-present",
       },
-      availableModels: new Set(["openai/gpt-5.3-codex"]),
+      availableModels: new Set(["opencode/kimi-k2.5-free"]),
     });
 
-    expect(resolved.model).toBe("openai/gpt-5.3-codex");
+    expect(resolved.model).toBe("opencode/kimi-k2.5-free");
     expect(resolved.source).toBe("default");
   });
 
   test("falls through fallback chain then system default", () => {
     const resolved = resolveModel({
-      agent: "hades",
+      agent: "demeter",
       defaults: AGENT_DEFAULTS,
       availableModels: new Set(["openai/gpt-5.1-codex-mini"]),
       systemDefaultModel: "openai/gpt-5.1-codex-mini",

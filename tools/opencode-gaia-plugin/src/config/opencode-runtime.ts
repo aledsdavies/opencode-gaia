@@ -2,18 +2,18 @@ import { getAgentPrompt } from "../agents/prompts.js";
 import type { LeanAgentKey } from "../agents/types.js";
 import { AGENT_DEFAULTS } from "./defaults.js";
 
-const LEAN_AGENT_KEYS: readonly LeanAgentKey[] = ["gaia", "minerva", "hephaestus", "demeter"];
+const LEAN_AGENT_KEYS: readonly LeanAgentKey[] = ["gaia", "athena", "hephaestus", "demeter"];
 
 const LEAN_AGENT_MODES: Record<LeanAgentKey, "primary" | "subagent"> = {
   gaia: "primary",
-  minerva: "subagent",
+  athena: "subagent",
   hephaestus: "subagent",
   demeter: "subagent",
 };
 
 const LEAN_AGENT_DESCRIPTIONS: Record<LeanAgentKey, string> = {
   gaia: "GAIA orchestrates human-in-the-loop product and engineering work units.",
-  minerva: "MINERVA maps repository reality and routes next actions.",
+  athena: "ATHENA maps repository reality and routes next actions.",
   hephaestus: "HEPHAESTUS implements scoped changes with TDD discipline.",
   demeter: "DEMETER captures decisions, logs, and durable project memory.",
 };
@@ -65,10 +65,23 @@ function buildAgentDefaults(agent: LeanAgentKey): UnknownRecord {
 
   if (agent === "gaia") {
     base.permission = {
+      read: "allow",
+      edit: "deny",
+      bash: "deny",
       gaia_init: "allow",
       delegate_gaia: "allow",
       question: "allow",
+      task: {
+        "*": "deny",
+        athena: "allow",
+        hephaestus: "allow",
+        demeter: "allow",
+      },
     };
+  }
+
+  if (agent !== "gaia") {
+    base.hidden = true;
   }
 
   return base;

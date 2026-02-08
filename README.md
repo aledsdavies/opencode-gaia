@@ -10,6 +10,16 @@ The project is built to explore both ends of collaboration:
 - Human-in-the-loop workflows where you can review and steer execution.
 - Agentic workflows where you can let the system run with fewer interruptions.
 
+## North Star
+
+GAIA is the orchestration and communication layer between humans and specialist agents.
+
+- Translate user intent into clear outcomes.
+- Route work to specialists with explicit contracts.
+- Keep checkpoints, decisions, and rationale recoverable across sessions.
+
+See `doc/SPECIFICATION.md` for the full product specification.
+
 ## Status
 
 Pre-alpha.
@@ -37,7 +47,8 @@ Recommended dev flow:
 
 1. Bootstrap isolated config and plugin wiring.
 2. Run basic smoke checks.
-3. Verify plugin tool path (`gaia_init`) and locked-mode guard.
+3. Verify lean subagent wiring (`gaia` primary, hidden specialists by default).
+4. Verify plugin tool path (`gaia_init`) and locked-mode guard.
 
 ```bash
 bun run --cwd tools/opencode-gaia-harness cli bootstrap
@@ -90,9 +101,12 @@ Commands print heartbeat progress lines while running (default every 10s). Overr
 
 ## Planning documents
 
-- `GAIA.md`
+- `doc/SPECIFICATION.md`
 - `.gaia/gaia-init.md`
-- `.gaia/plans/project-gaia-plugin.md`
-- `.gaia/plans/project-gaia-plugin-implementation-companion.md`
 - `.gaia/plans/project-gaia-plugin-mvp-cut.md`
 - `.gaia/plans/gaia-init-spec.md`
+
+## Documentation split
+
+- Project-facing specification and product docs live in `doc/`.
+- GAIA operational plans, memory surfaces, and run artifacts live in `.gaia/`.

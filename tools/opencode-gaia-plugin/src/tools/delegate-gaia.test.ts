@@ -23,12 +23,12 @@ describe("delegateGaia", () => {
       sessionId: "s2",
       modelUsed: "openai/gpt-5.3-codex",
       responseText:
-        "Sure, here is the payload:\n```json\n{\n  \"contract_version\": \"1.0\",\n  \"agent\": \"minerva\"\n}\n```",
+        "Sure, here is the payload:\n```json\n{\n  \"contract_version\": \"1.0\",\n  \"agent\": \"athena\"\n}\n```",
       parse: (input) => input,
     });
 
     expect(result.status).toBe("ok");
-    expect(result.parsed_json).toEqual({ contract_version: "1.0", agent: "minerva" });
+    expect(result.parsed_json).toEqual({ contract_version: "1.0", agent: "athena" });
   });
 
   test("retries once when first parse fails and returns retry result", async () => {

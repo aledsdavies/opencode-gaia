@@ -10,23 +10,12 @@ import type {
 
 export const LEAN_AGENT_KEYS: readonly LeanAgentKey[] = [
   "gaia",
-  "minerva",
+  "athena",
   "hephaestus",
   "demeter",
 ] as const;
 
-export const ALL_AGENT_KEYS: readonly AgentKey[] = [
-  "gaia",
-  "minerva",
-  "apollo",
-  "eleuthia",
-  "hephaestus",
-  "demeter",
-  "artemis",
-  "aether",
-  "poseidon",
-  "hades",
-] as const;
+export const ALL_AGENT_KEYS: readonly AgentKey[] = [...LEAN_AGENT_KEYS];
 
 export type LeanAgentRegistry = Record<LeanAgentKey, AgentRuntimeConfig>;
 
@@ -71,26 +60,10 @@ function mergePrompt(basePrompt: string, override?: AgentOverride): string {
 }
 
 function resolveCustomLeanAgentKeys(config: GaiaConfig): AgentKey[] {
-  const subsystemConfig = config.operationProfile.customSubsystems;
-  if (!subsystemConfig) {
-    throw new Error("custom operation profile requires customSubsystems");
-  }
+  const configured = config.operationProfile.customAgents ?? [];
+  const deduped = Array.from(new Set(configured));
 
-  const result: AgentKey[] = ["gaia"];
-
-  if (subsystemConfig.reconRouting) {
-    result.push("minerva");
-  }
-
-  if (subsystemConfig.implementation) {
-    result.push("hephaestus");
-  }
-
-  if (subsystemConfig.projectMemory) {
-    result.push("demeter");
-  }
-
-  return result;
+  return ["gaia", ...deduped];
 }
 
 export function resolveOperationAgentKeys(config: GaiaConfig): AgentKey[] {

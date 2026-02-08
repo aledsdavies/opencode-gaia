@@ -7,7 +7,7 @@ import {
   runGaiaInit,
 } from "../../../tools/opencode-gaia-plugin/src/index.ts";
 
-const LEAN_AGENTS = ["gaia", "minerva", "hephaestus", "demeter"] as const;
+const LEAN_AGENTS = ["gaia", "athena", "hephaestus", "demeter"] as const;
 
 function resolveRepoRoot(context: { directory: string; worktree: string }): string {
   if (context.worktree && context.worktree !== "/") {

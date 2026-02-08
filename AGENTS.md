@@ -2,6 +2,12 @@
 
 This repository is pre-alpha. Keep changes small, typed, and easy to verify.
 
+## Alpha Evolution
+
+- This project is greenfield/pre-alpha.
+- Breaking changes are acceptable when they improve the core design.
+- Do not add compatibility shims or legacy aliases unless explicitly requested.
+
 ## Version Control
 
 - This is a JJ project. Use JJ-first workflows for local version control operations.
@@ -18,6 +24,12 @@ This repository is pre-alpha. Keep changes small, typed, and easy to verify.
 - Keep strict TypeScript enabled.
 - Do not introduce explicit `any`.
 - Use `unknown` plus narrowing/validation at dynamic boundaries.
+
+## Comments and Documentation
+
+- Keep comments in present tense.
+- Do not reference deleted or replaced code in comments.
+- Prefer comments that explain current intent, not history.
 
 ## Testing Approach
 
